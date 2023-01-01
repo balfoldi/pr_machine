@@ -1,5 +1,3 @@
-require_relative "../api/github.rb"
-
 class PullRequests
   attr_accessor :number, :owner, :template
   BASE_BRANCH = 'develop'
@@ -8,8 +6,6 @@ class PullRequests
 
   def initialize(number: nil)
     @api = Github.new
-    @owner = @api.owner
-    @repository = local_repository
     @number = number
 
     @title = default_title
@@ -35,7 +31,7 @@ class PullRequests
   private
 
   def path
-    path = Github::BASE_URL + "/#{@owner}/#{@repository}/pulls"
+    path = @api.base_url + "/pulls"
     path + "/#{@number}" if @number
 
     path
@@ -43,10 +39,6 @@ class PullRequests
 
   def body
     { title: @title, body: @template, head: @head_branch, base: @base_branch }
-  end
-
-  def local_repository
-    %x(basename `git rev-parse --show-toplevel`).chomp
   end
 
   def current_branch
