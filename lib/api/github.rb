@@ -5,7 +5,7 @@ class Github
 
   def initialize
     @token = ENV['GITHUB_PERSONAL_ACCESS_TOKEN']
-    @base_url = ROOT_URL + "/#{ENV['OWNER']}/#{local_repository}"
+    @base_url = ROOT_URL + "/repos/#{ENV['OWNER']}/#{local_repository}"
     @username = current_user_login
   end
 

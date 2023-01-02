@@ -2,7 +2,6 @@ class PullRequests
   attr_accessor :number, :owner, :template
   BASE_BRANCH = 'develop'
   BASE_NAME = 'Feature'
-  BASE_LABEL = Labels.new(name: 'feature')
 
   def initialize(number: nil)
     @api = Github.new
@@ -10,17 +9,20 @@ class PullRequests
 
     @title = default_title
     @template = local_template
-    @head_branch = current_branch
-    @base_branch = BASE_BRANCH
+    @current_branch = Branchs.new
+    @base_branch_name = BASE_BRANCH
+    @base_label = Labels.new
   end
 
   def post
-    system("git push --set-upstream origin #{@head_branch}")
+    @current_branch.publish
+    p path
+    p '================'
     response = HTTParty.post(path, headers: @api.headers, body: body.to_json)
 
     @number = JSON.parse(response.body)["number"]
 
-    BASE_LABEL.attach self
+    Labels.new.attach self
     Assignees.new.attach self
   end
 
@@ -38,7 +40,7 @@ class PullRequests
   end
 
   def body
-    { title: @title, body: @template, head: @head_branch, base: @base_branch }
+    { title: @title, body: @template, head: @current_branch.name, base: @base_branch_name }
   end
 
   def current_branch

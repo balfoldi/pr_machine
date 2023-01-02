@@ -1,7 +1,7 @@
 class Labels
-  def initialize(name:)
+  def initialize
     @api = Github.new
-    @name = name
+    @name = Branchs.new.tag
   end
 
   def attach(issue)
