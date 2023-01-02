@@ -15,8 +15,7 @@ class PullRequests
 
   def post
     @current_branch.publish
-    p path
-    p '================'
+
     response = HTTParty.post(path, headers: @api.headers, body: body.to_json)
 
     @number = JSON.parse(response.body)["number"]
