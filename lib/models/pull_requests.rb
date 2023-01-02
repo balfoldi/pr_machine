@@ -1,7 +1,6 @@
 class PullRequests
   attr_accessor :number, :owner, :template
-  BASE_BRANCH = 'develop'
-  BASE_NAME = 'Feature'
+  BASE_BRANCH_NAME = 'develop'
 
   def initialize(number: nil)
     @api = Github.new
@@ -10,7 +9,7 @@ class PullRequests
     @title = default_title
     @template = local_template
     @current_branch = Branchs.new
-    @base_branch_name = BASE_BRANCH
+    @base_branch_name = BASE_BRANCH_NAME
     @base_label = Labels.new
   end
 
