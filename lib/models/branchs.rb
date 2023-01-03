@@ -20,6 +20,13 @@ class Branchs
     system("git push --set-upstream origin #{@name}") unless remote?
   end
 
+  def push_to_qa
+    system("git checkout qa")
+    system("git pull")
+    system("git pull origin #{@name}")
+    system("git push")
+  end
+
   def validate!
     return if @name.nil? || @name.match?(VALID_FORMAT_REGEX)
 

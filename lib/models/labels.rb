@@ -1,17 +1,17 @@
 class Labels
-  def initialize
+  def initialize(name: nil)
     @api = Github.new
-    @name = Branchs.new.tag
+    @name = name || Branchs.new.tag
   end
 
-  def attach(issue)
-    HTTParty.post(path(issue), headers: @api.headers, body: body.to_json)
+  def attach(issue_number)
+    HTTParty.post(path(issue_number), headers: @api.headers, body: body.to_json)
   end
 
   private
 
-  def path(issue)
-    @api.base_url + "/issues/#{issue.number}/labels"
+  def path(issue_number)
+    @api.base_url + "/issues/#{issue_number.number}/labels"
   end
 
   def body

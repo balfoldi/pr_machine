@@ -2,19 +2,19 @@ class PullRequests
   attr_accessor :number, :owner, :template
   BASE_BRANCH_NAME = ENV['BASE_BRANCH']
 
-  def initialize(number: nil)
+  def initialize
     @api = Github.new
     @number = number
 
     @title = default_title
     @template = local_template
-    @current_branch = Branchs.new
+    @head_branch = Branchs.new
     @base_branch_name = base_branch_name
     @base_label = Labels.new
   end
 
   def post
-    @current_branch.publish
+    @head_branch.publish
 
     response = HTTParty.post(path, headers: @api.headers, body: body.to_json)
 
@@ -25,7 +25,23 @@ class PullRequests
   end
 
   def get
-    HTTParty.get(path, headers: @api.headers)
+    search_query="repo:#{@api.owner}/#{@api.repository}+head:#{@head_branch.name}"
+    url="https://api.github.com/search/issues?q=#{search_query}"
+
+    response = HTTParty.get(url, headers: @api.headers)
+
+    return unless JSON.parse(response.body)["total_count"] > 0
+
+    @number = JSON.parse(response.body)["items"].first["number"]
+  end
+
+  def move_to_qa
+    get if @number.nil?
+
+    @head_branch.push_to_qa
+
+    Labels.new(name: 'QA').attach @number
+    Labels.new(name: 'QA').attach @head_branch.issue_number
   end
 
   private
@@ -44,15 +60,15 @@ class PullRequests
   end
 
   def body
-    { title: @title, body: @template, head: @current_branch.name, base: @base_branch_name }
+    { title: @title, body: @template, head: @head_branch.name, base: @base_branch_name }
   end
 
-  def current_branch
+  def head_branch
     %x(git rev-parse --abbrev-ref HEAD).chomp
   end
 
   def default_title
-    current_branch.capitalize.gsub('_', ' ')
+    head_branch.capitalize.gsub('_', ' ')
   end
 
   def local_template
