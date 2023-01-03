@@ -10,8 +10,4 @@ require_relative "./lib/models/assignees.rb"
 require_relative "./lib/models/pull_requests.rb"
 require_relative "./lib/models/branchs.rb"
 
-pr = PullRequests.new
-p pr.post
-p pr
-# binding.pry
-# p Labels.new
+p PullRequests.new.base_branch

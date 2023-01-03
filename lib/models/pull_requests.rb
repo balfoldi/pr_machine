@@ -1,6 +1,6 @@
 class PullRequests
   attr_accessor :number, :owner, :template
-  BASE_BRANCH_NAME = 'develop'
+  BASE_BRANCH_NAME = ENV['BASE_BRANCH']
 
   def initialize(number: nil)
     @api = Github.new
@@ -9,7 +9,7 @@ class PullRequests
     @title = default_title
     @template = local_template
     @current_branch = Branchs.new
-    @base_branch_name = BASE_BRANCH_NAME
+    @base_branch_name = base_branch_name
     @base_label = Labels.new
   end
 
@@ -29,6 +29,12 @@ class PullRequests
   end
 
   private
+
+  def base_branch_name
+    response = HTTParty.get(@api.base_url, headers: @api.headers)
+
+    JSON.parse(response.body)["default_branch"]
+  end
 
   def path
     path = @api.base_url + "/pulls"
