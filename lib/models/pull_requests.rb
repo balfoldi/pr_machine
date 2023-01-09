@@ -1,13 +1,13 @@
 class PullRequests
   attr_accessor :number, :owner, :template
   BASE_BRANCH_NAME = ENV['BASE_BRANCH']
+  ISSUE_URL = 'https://github.com/captaincontrat/captaincontrat/issues/'
 
   def initialize
     @api = Github.new
     @number = number
 
     @title = default_title
-    @template = local_template
     @head_branch = Branchs.new
     @base_branch_name = base_branch_name
     @base_label = Labels.new
@@ -60,7 +60,7 @@ class PullRequests
   end
 
   def body
-    { title: @title, body: @template, head: @head_branch.name, base: @base_branch_name }
+    { title: @title, body: local_template, head: @head_branch.name, base: @base_branch_name }
   end
 
   def head_branch
@@ -71,7 +71,20 @@ class PullRequests
     head_branch.capitalize.gsub('_', ' ')
   end
 
+  def issue_url
+    url = @api.base_url + "/issues/#{@head_branch.issue_number}/"
+    response = HTTParty.get(@api.base_url, headers: @api.headers)
+
+    JSON.parse(response.body)
+  end
+
   def local_template
-    File.read('.github/PULL_REQUEST_TEMPLATE.md') if File.exists?('.github/PULL_REQUEST_TEMPLATE.md')
+    return unless File.exists?('.github/PULL_REQUEST_TEMPLATE.md')
+
+    template = File.read('.github/PULL_REQUEST_TEMPLATE.md')
+
+    issue_url_checkbox_selector = '\n- [x]'
+
+    template.gsub(issue_url_checkbox_selector, issue_url_checkbox_selector + " " + ISSUE_URL + @head_branch.issue_number) + "\nThis PR was made using https://github.com/balfoldi/pr_machine"
   end
 end
