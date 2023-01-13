@@ -23,6 +23,6 @@ class Github
   end
 
   def local_repository
-    %x(basename `git rev-parse --show-toplevel`).chomp
+    %x(basename $(git remote get-url origin) .git).chomp
   end
 end

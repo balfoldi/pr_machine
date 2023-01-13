@@ -16,12 +16,12 @@ class PullRequests
   def post
     @head_branch.publish
 
-    response = HTTParty.post(path, headers: @api.headers, body: body.to_json)
+    p response = HTTParty.post(path, headers: @api.headers, body: body.to_json)
 
     @number = JSON.parse(response.body)["number"]
 
-    Labels.new.attach self
-    Assignees.new.attach self
+    p Labels.new.attach self
+    p Assignees.new.attach self
   end
 
   def get
