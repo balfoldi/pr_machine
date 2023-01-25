@@ -17,4 +17,4 @@ Utilisation :
 move this folder next to your working repo
 
 run :
-`$ BUNDLE_GEMFILE=../pr_machine/Gemfile  bundle exec ruby ../pr_machine/app.rb`
+`$ BUNDLE_GEMFILE=../yandere_machine/Gemfile  bundle exec ruby ../yandere_machine/app.rb`

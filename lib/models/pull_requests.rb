@@ -83,8 +83,8 @@ class PullRequests
 
     template = File.read('.github/PULL_REQUEST_TEMPLATE.md')
 
-    issue_url_checkbox_selector = '\n- [x]'
+    issue_url_checkbox_selector = '- [x] '
 
-    template.gsub(issue_url_checkbox_selector, issue_url_checkbox_selector + " " + ISSUE_URL + @head_branch.issue_number) + "\nThis PR was made using https://github.com/balfoldi/pr_machine"
+    template.gsub(issue_url_checkbox_selector, issue_url_checkbox_selector + ISSUE_URL + @head_branch.issue_number) + "\nThis PR was made using https://github.com/balfoldi/yandere_machine"
   end
 end
