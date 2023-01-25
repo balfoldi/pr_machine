@@ -30,7 +30,7 @@ class Branchs
   def validate!
     return if @name.nil? || @name.match?(VALID_FORMAT_REGEX)
 
-    Raise BranchNameFormatError
+    raise NameFormatError
   end
 
   private
