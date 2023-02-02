@@ -1,7 +1,13 @@
 class Github
+  class ResponseError < StandardError
+  end
   attr_accessor :username, :token, :owner, :base_url, :owner, :repository
 
   ROOT_URL = 'https://api.github.com'
+
+  def self.raise_http_error(response)
+    raise ResponseError.new(JSON.parse(response.body)) unless response.success?
+  end
 
   def initialize
     @token = ENV['GITHUB_PERSONAL_ACCESS_TOKEN']
@@ -18,8 +24,8 @@ class Github
   private
 
   def current_user_login
-    response = HTTParty.get(ROOT_URL + '/user', headers: self.headers)
-    JSON.parse(response.body)["login"]
+    @response = HTTParty.get(ROOT_URL + '/user', headers: self.headers)
+    JSON.parse(@response.body)["login"]
   end
 
   def local_repository

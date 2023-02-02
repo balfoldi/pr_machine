@@ -18,6 +18,8 @@ class PullRequests
 
     p response = HTTParty.post(path, headers: @api.headers, body: body.to_json)
 
+    Github.raise_http_error(response)
+
     @number = JSON.parse(response.body)["number"]
 
     p Labels.new.attach self
@@ -83,8 +85,8 @@ class PullRequests
 
     template = File.read('.github/PULL_REQUEST_TEMPLATE.md')
 
-    issue_url_checkbox_selector = '- [x] '
+    issue_url_checkbox_selector = '- [x]'
 
-    template.gsub(issue_url_checkbox_selector, issue_url_checkbox_selector + ISSUE_URL + @head_branch.issue_number) + "\nThis PR was made using https://github.com/balfoldi/yandere_machine"
+    template.gsub(issue_url_checkbox_selector, issue_url_checkbox_selector + ' ' + ISSUE_URL + @head_branch.issue_number) + "\nThis PR was made using https://github.com/balfoldi/yandere_machine"
   end
 end

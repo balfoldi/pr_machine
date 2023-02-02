@@ -1,6 +1,8 @@
 class Branchs
   class BranchNameFormatError < StandardError
   end
+  class NoDiffError < StandardError
+  end
 
   VALID_FORMAT_REGEX = /\/\d+_/
 
@@ -30,7 +32,7 @@ class Branchs
   def validate!
     return if @name.nil? || @name.match?(VALID_FORMAT_REGEX)
 
-    raise NameFormatError
+    raise BranchNameFormatError
   end
 
   private
@@ -45,5 +47,11 @@ class Branchs
 
   def current
     %x(git rev-parse --abbrev-ref HEAD).chomp
+  end
+
+  def validate_diff_with_base_branch
+    return unless %x(git diff #{@head_branch.name} #{@base_branch_name}).empty?
+
+    raise NoDiffError
   end
 end
