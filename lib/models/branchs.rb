@@ -35,6 +35,12 @@ class Branchs
     raise BranchNameFormatError
   end
 
+  def validate_diff_with!(branch_name)
+    return unless %x(git diff #{name} #{branch_name}).empty?
+
+    raise NoDiffError
+  end
+
   private
 
   def remote?
@@ -47,11 +53,5 @@ class Branchs
 
   def current
     %x(git rev-parse --abbrev-ref HEAD).chomp
-  end
-
-  def validate_diff_with_base_branch!
-    return unless %x(git diff #{@head_branch.name} #{@base_branch_name}).empty?
-
-    raise NoDiffError
   end
 end

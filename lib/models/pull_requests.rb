@@ -15,16 +15,16 @@ class PullRequests
 
   def post
     @head_branch.publish
+    @head_branch.validate_diff_with!(@base_branch_name)
 
-    p response = HTTParty.post(path, headers: @api.headers, body: body.to_json)
+    response = HTTParty.post(path, headers: @api.headers, body: body.to_json)
 
-    @head_branch.validate_diff_with_base_branch!
     Github.raise_http_error(response)
 
     @number = JSON.parse(response.body)["number"]
 
-    p Labels.new.attach self
-    p Assignees.new.attach self
+    Labels.new.attach self
+    Assignees.new.attach self
   end
 
   def get
