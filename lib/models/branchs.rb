@@ -49,7 +49,7 @@ class Branchs
     %x(git rev-parse --abbrev-ref HEAD).chomp
   end
 
-  def validate_diff_with_base_branch
+  def validate_diff_with_base_branch!
     return unless %x(git diff #{@head_branch.name} #{@base_branch_name}).empty?
 
     raise NoDiffError

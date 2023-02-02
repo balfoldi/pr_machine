@@ -18,6 +18,7 @@ class PullRequests
 
     p response = HTTParty.post(path, headers: @api.headers, body: body.to_json)
 
+    @head_branch.validate_diff_with_base_branch!
     Github.raise_http_error(response)
 
     @number = JSON.parse(response.body)["number"]
