@@ -10,4 +10,14 @@ require_relative "./lib/models/assignees.rb"
 require_relative "./lib/models/pull_requests.rb"
 require_relative "./lib/models/branchs.rb"
 
-p PullRequests.new.post
+p "My owner is #{ENV['OWNER']}}"
+
+unless ARGV[0]
+  p 'Send() me anything to my PullRequests class'
+  input = gets.chomp
+else
+  input = ARGV[0]
+  p "Ok, i will send() #{ARGV[0]}"
+end
+
+p PullRequests.new.send(input)
