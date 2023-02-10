@@ -52,6 +52,8 @@ class PullRequests
   def base_branch_name
     response = HTTParty.get(@api.base_url, headers: @api.headers)
 
+    Github.raise_http_error(response)
+
     JSON.parse(response.body)["default_branch"]
   end
 
