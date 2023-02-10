@@ -11,7 +11,7 @@ class Labels
   private
 
   def path(issue_number)
-    @api.base_url + "/issues/#{issue_number.number}/labels"
+    @api.base_url + "/issues/#{issue_number}/labels"
   end
 
   def body

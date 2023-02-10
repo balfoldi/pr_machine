@@ -23,7 +23,7 @@ class PullRequests
 
     @number = JSON.parse(response.body)["number"]
 
-    Labels.new.attach self
+    Labels.new.attach @number
     Assignees.new.attach self
   end
 
