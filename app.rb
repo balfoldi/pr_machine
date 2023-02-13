@@ -10,7 +10,7 @@ require_relative "./lib/models/assignees.rb"
 require_relative "./lib/models/pull_requests.rb"
 require_relative "./lib/models/branchs.rb"
 
-p "My owner is #{ENV['OWNER']}}"
+p "My owner is #{ENV['OWNER']}"
 
 unless ARGV[0]
   p 'Send() me anything to my PullRequests class'
