@@ -1,7 +1,7 @@
 class Github
   class ResponseError < StandardError
   end
-  attr_accessor :username, :token, :owner, :base_url, :owner, :repository
+  attr_accessor :username, :token, :owner, :base_url, :issue_base_url, :owner, :repository
 
   ROOT_URL = 'https://api.github.com'
 
@@ -14,6 +14,7 @@ class Github
     @owner = ENV['OWNER']
     @repository = local_repository
     @base_url = ROOT_URL + "/repos/#{ENV['OWNER']}/#{@repository}"
+    @issue_base_url = ROOT_URL + "/repos/#{ENV['OWNER']}/#{ENV['OWNER']}"
     @username = current_user_login
   end
 

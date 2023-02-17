@@ -27,6 +27,7 @@ class Branchs
     system("git pull")
     system("git pull origin #{@name}")
     system("git push")
+    system("git checkout -")
   end
 
   def validate!

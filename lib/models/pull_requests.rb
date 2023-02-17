@@ -43,8 +43,8 @@ class PullRequests
 
     @head_branch.push_to_qa
 
-    Labels.new(name: 'QA').attach @number
-    Labels.new(name: 'QA').attach @head_branch.issue_number
+    Labels.new(name: 'QA').attach pull_request_number: @number
+    Labels.new(name: 'QA').attach issue_number: @head_branch.issue_number
   end
 
   private
